@@ -12,3 +12,4 @@ c:\Users\pjmat\Projects\csharp\SnakeRootGame\SnakeRootGame\obj\Debug\net9.0\refi
 c:\Users\pjmat\Projects\csharp\SnakeRootGame\SnakeRootGame\obj\Debug\net9.0\SnakeRootGame.pdb
 c:\Users\pjmat\Projects\csharp\SnakeRootGame\SnakeRootGame\obj\Debug\net9.0\SnakeRootGame.genruntimeconfig.cache
 c:\Users\pjmat\Projects\csharp\SnakeRootGame\SnakeRootGame\obj\Debug\net9.0\ref\SnakeRootGame.dll
+c:\Users\pjmat\Projects\csharp\SnakeRootGame\SnakeRootGame\obj\Debug\net9.0\SnakeRootGame.sourcelink.json

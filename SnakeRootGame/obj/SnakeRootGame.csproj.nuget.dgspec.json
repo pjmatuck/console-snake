@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\pjmat\\Projects\\csharp\\SnakeRootGame\\SnakeRootGame\\SnakeRootGame.csproj": {}
+    "C:\\Users\\pjmat\\Projects\\csharp\\SnakeRootGame\\SnakeRootGame\\SnakeRootGame.csproj": {}
   },
   "projects": {
-    "c:\\Users\\pjmat\\Projects\\csharp\\SnakeRootGame\\SnakeRootGame\\SnakeRootGame.csproj": {
+    "C:\\Users\\pjmat\\Projects\\csharp\\SnakeRootGame\\SnakeRootGame\\SnakeRootGame.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\pjmat\\Projects\\csharp\\SnakeRootGame\\SnakeRootGame\\SnakeRootGame.csproj",
+        "projectUniqueName": "C:\\Users\\pjmat\\Projects\\csharp\\SnakeRootGame\\SnakeRootGame\\SnakeRootGame.csproj",
         "projectName": "SnakeRootGame",
-        "projectPath": "c:\\Users\\pjmat\\Projects\\csharp\\SnakeRootGame\\SnakeRootGame\\SnakeRootGame.csproj",
+        "projectPath": "C:\\Users\\pjmat\\Projects\\csharp\\SnakeRootGame\\SnakeRootGame\\SnakeRootGame.csproj",
         "packagesPath": "C:\\Users\\pjmat\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\pjmat\\Projects\\csharp\\SnakeRootGame\\SnakeRootGame\\obj\\",
+        "outputPath": "C:\\Users\\pjmat\\Projects\\csharp\\SnakeRootGame\\SnakeRootGame\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pjmat\\AppData\\Roaming\\NuGet\\NuGet.Config"

@@ -1,0 +1,15 @@
+C:\Users\pjmat\Projects\csharp\SnakeRootGame\SnakeRootGame\bin\Release\net9.0\SnakeRootGame.exe
+C:\Users\pjmat\Projects\csharp\SnakeRootGame\SnakeRootGame\bin\Release\net9.0\SnakeRootGame.deps.json
+C:\Users\pjmat\Projects\csharp\SnakeRootGame\SnakeRootGame\bin\Release\net9.0\SnakeRootGame.runtimeconfig.json
+C:\Users\pjmat\Projects\csharp\SnakeRootGame\SnakeRootGame\bin\Release\net9.0\SnakeRootGame.dll
+C:\Users\pjmat\Projects\csharp\SnakeRootGame\SnakeRootGame\bin\Release\net9.0\SnakeRootGame.pdb
+C:\Users\pjmat\Projects\csharp\SnakeRootGame\SnakeRootGame\obj\Release\net9.0\SnakeRootGame.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\pjmat\Projects\csharp\SnakeRootGame\SnakeRootGame\obj\Release\net9.0\SnakeRootGame.AssemblyInfoInputs.cache
+C:\Users\pjmat\Projects\csharp\SnakeRootGame\SnakeRootGame\obj\Release\net9.0\SnakeRootGame.AssemblyInfo.cs
+C:\Users\pjmat\Projects\csharp\SnakeRootGame\SnakeRootGame\obj\Release\net9.0\SnakeRootGame.csproj.CoreCompileInputs.cache
+C:\Users\pjmat\Projects\csharp\SnakeRootGame\SnakeRootGame\obj\Release\net9.0\SnakeRootGame.sourcelink.json
+C:\Users\pjmat\Projects\csharp\SnakeRootGame\SnakeRootGame\obj\Release\net9.0\SnakeRootGame.dll
+C:\Users\pjmat\Projects\csharp\SnakeRootGame\SnakeRootGame\obj\Release\net9.0\refint\SnakeRootGame.dll
+C:\Users\pjmat\Projects\csharp\SnakeRootGame\SnakeRootGame\obj\Release\net9.0\SnakeRootGame.pdb
+C:\Users\pjmat\Projects\csharp\SnakeRootGame\SnakeRootGame\obj\Release\net9.0\SnakeRootGame.genruntimeconfig.cache
+C:\Users\pjmat\Projects\csharp\SnakeRootGame\SnakeRootGame\obj\Release\net9.0\ref\SnakeRootGame.dll

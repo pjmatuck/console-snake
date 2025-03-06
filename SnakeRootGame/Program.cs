@@ -1,74 +1,172 @@
-﻿namespace SnakeRootGame;
+﻿using System.Text;
+
+namespace SnakeRootGame;
 
 class Program
 {
     //GAME CONFIG
     static int GAME_RESOLUTION = 16;
     static int FRAME_DELTA_TIME_MILLI = 500;
+    static bool IS_GAME_OVER = false;
+    static bool RESTART_GAME = false;
+    static int FRUIT_SPAWN_TIME = 5000;
+    static int ELAPSED_TIME = 0;
     //GAME DATA
-    static int PLAYER_POINTS = 0;
+    static int PLAYER_SCORE = 0;
     //PLAYER CONFIG
-    //static readonly char PLAYER_CHAR = 'S';
     static List<Point> SNAKE_BODY = new List<Point>();
     static Point SNAKE_HEAD = new Point(1, 1);
+    static Point COLLISION_POINT;
     //FRUITS
-    static char FRUIT_CHAR = 'o';
+    static char FRUIT_CHAR = '⬤';
     static int FRUIT_AMOUNT = 10;
-    static int[,] FRUITS = new int[GAME_RESOLUTION+1, GAME_RESOLUTION+1];
+    static int[,] FRUITS;
      
 
-    static void Main(string[] args)
+    static void Main()
     {
-        InputData inputData = new();
-
-        InitializeFruits();
-        ExpandBody(0,0);
-
-        while(true)
+        do
         {
-            Draw();
-            Thread.Sleep(FRAME_DELTA_TIME_MILLI);
-            Input(inputData);
-            Update(inputData);
+            InputData inputData = new();
+
+            InitialSetup();
+            PlayStartSound();          
+
+            InitializeFruits();
+            ExpandBody(0,0);
+
+            do
+            {
+                Draw();
+                Thread.Sleep(FRAME_DELTA_TIME_MILLI - PLAYER_SCORE);
+                Input(inputData);
+                Update(inputData);
+            } while (!IS_GAME_OVER);
+
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            
+            GameOver();
+        }
+
+        while(RESTART_GAME);
+    }
+
+    private static void InitialSetup()
+    {
+        Console.CursorVisible = false;
+        Console.OutputEncoding = Encoding.UTF8;
+        RESTART_GAME = false;
+        PLAYER_SCORE = 0;
+        SNAKE_HEAD = new Point(1, 1);
+        SNAKE_BODY.Clear();
+        COLLISION_POINT = new Point(0, 0);
+        IS_GAME_OVER = false;
+    }
+
+    private static void GameOver()
+    {
+        PlayEndSound();
+        Console.SetCursorPosition(0, 0);
+        for(int y = 0; y <= GAME_RESOLUTION + 1; y++)
+        {
+            for(int x = 0; x <= GAME_RESOLUTION + 1; x++)
+            {
+                Console.Write("  ");
+                Thread.Sleep(1);
+            }
+            Console.Write("\n");
+        }
+
+        Console.Clear();
+        Console.Write(@"
+
+
+         GG    A   MM MM EEEE
+        G     A A  M M M E
+        G GG A   A M M M EEE
+        G  G AAAAA M   M E
+        GG   A   A M   M EEEE
+
+         OO  V   V EEEEE RRRR
+        O  O V   V E     R  R
+        O  O V   V EEE   RRRR
+        O  O  V V  E     R R
+         OO    V   EEEEE R  R");
+
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.Write($"\n\n\tSCORE: {PLAYER_SCORE}\n\n");
+        Console.ResetColor();
+        Console.WriteLine("  Press HOME to restart the game.");
+        
+        CheckForGameRestart();
+    }
+
+    private static void CheckForGameRestart()
+    {
+        ConsoleKeyInfo consoleInput = Console.ReadKey(true);
+
+        if(consoleInput.Key == ConsoleKey.Home)
+        {
+            RESTART_GAME = true;
         }
     }
 
     private static void InitializeFruits()
     {
-        Random random = new Random();
+        FRUITS = new int[GAME_RESOLUTION+1, GAME_RESOLUTION+1];
 
         for(int i = 0; i < FRUIT_AMOUNT; i++)
         {
-            FRUITS[
-                random.Next(1, GAME_RESOLUTION),
-                random.Next(1, GAME_RESOLUTION)] = 1;
+            GenerateFruit();
         }
+    }
+
+    static void GenerateFruit()
+    {
+        Random random = new Random();
+
+        int x = random.Next(1, GAME_RESOLUTION);
+        int y = random.Next(1, GAME_RESOLUTION);
+
+        if(FRUITS[x,y] == 1 || CheckIfThereIsBody(x,y))
+            GenerateFruit();
+        else 
+            FRUITS[x,y] = 1;
     }
 
 
     private static void Draw()
     {
-        Console.Write("║");
-
         Console.Clear();
         for(int y = 0; y < GAME_RESOLUTION + 2; y++)
         {
             for(int x = 0; x < GAME_RESOLUTION + 2; x++)
             {
+                if(COLLISION_POINT.INITIALIZED 
+                && COLLISION_POINT.X == x 
+                && COLLISION_POINT.Y == y)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write('X');
+                    Console.ResetColor();
+                    IS_GAME_OVER = true;
+                }
                 if(y == 0 && x == 0)
                     Console.Write(" ╔");
-                else if(y == 0 || y == GAME_RESOLUTION + 1)
-                    Console.Write("══");
                 else if(y == 0 && x == GAME_RESOLUTION + 1)
                     Console.Write("╗ ");
+                else if(y == GAME_RESOLUTION + 1 && x == 0)
+                    Console.Write(" ╚");
+                else if (y == GAME_RESOLUTION + 1 && x == GAME_RESOLUTION + 1)
+                    Console.Write("╝ ");
+                else if(y == 0 && x != 0)
+                    Console.Write("══");
+                else if(y == GAME_RESOLUTION + 1 && x != 0)
+                    Console.Write("══");
                 else if(x == 0)
                     Console.Write(" ║");
                 else if(x == GAME_RESOLUTION + 1)
                     Console.Write("║ ");
-                else if(y == GAME_RESOLUTION + 1 && x == 0)
-                    Console.Write("╚");
-                else if (y == GAME_RESOLUTION + 1 && x == GAME_RESOLUTION + 1)
-                    Console.Write("╝");
 
                 else if(x > GAME_RESOLUTION || y > GAME_RESOLUTION)
                     continue;
@@ -85,22 +183,28 @@ class Program
                     Console.Write("  ");
                     Console.ResetColor();
                 }
+                else if(SNAKE_HEAD.X == x && SNAKE_HEAD.Y == y)
+                {
+                    Console.BackgroundColor = ConsoleColor.Green;
+                    Console.Write("  ");
+                    Console.ResetColor();
+                }
                 else
                 {
-                    Console.Write(". ");
+                    Console.Write("  ");
                 }
                 
             }
-            Console.WriteLine("\n");
+            Console.Write("\n");
         }
         Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine($"POINTS: {PLAYER_POINTS}");
+        Console.WriteLine($"\n  SCORE: {PLAYER_SCORE}");
         Console.ResetColor();
     }
 
     private static bool CheckIfThereIsBody(int x, int y)
     {
-        for(int i = 0; i < SNAKE_BODY.Count; i++)
+        for(int i = 1; i < SNAKE_BODY.Count; i++)
         {
             if (SNAKE_BODY[i].X == x && SNAKE_BODY[i].Y == y)
                 return true;
@@ -127,21 +231,48 @@ class Program
 
     private static void Update(InputData inputData)
     {
-        if(inputData.lastKeyInfo != inputData.newKeyInfo)
-            inputData.direction =  UpdateDirection(inputData.newKeyInfo);
-                    
-        UpdatePosition(inputData.direction);
+        if(IS_GAME_OVER) return;
 
-        CheckFruitColision();
+        if(inputData.lastKeyInfo != inputData.newKeyInfo)
+            inputData.direction =  UpdateDirection(inputData.lastKeyInfo, inputData.newKeyInfo);
+                    
+        Point updatedPosition = UpdatePosition(inputData.direction);
+
+        if(CheckWallCollision() || CheckIfThereIsBody(updatedPosition.X, updatedPosition.Y))
+        {
+            COLLISION_POINT = updatedPosition;
+            return;
+        }
+
+        CheckFruitCollision();
+
+        ELAPSED_TIME += FRAME_DELTA_TIME_MILLI - PLAYER_SCORE;
+        if(ELAPSED_TIME > FRUIT_SPAWN_TIME)
+        {
+            GenerateFruit();
+            ELAPSED_TIME = 0;
+        }
     }
 
-    private static void CheckFruitColision()
+    private static bool CheckWallCollision()
+    {
+        if(SNAKE_HEAD.X == 0 || SNAKE_HEAD.X == GAME_RESOLUTION + 1
+        || SNAKE_HEAD.Y == 0 || SNAKE_HEAD.Y == GAME_RESOLUTION + 1)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private static void CheckFruitCollision()
     {
         if(FRUITS[SNAKE_HEAD.X,SNAKE_HEAD.Y] == 1)
         {
-            PLAYER_POINTS += 10;
+            PLAYER_SCORE += 10;
             FRUITS[SNAKE_HEAD.X,SNAKE_HEAD.Y] = 0;
             ExpandBody(SNAKE_HEAD.X,SNAKE_HEAD.Y);
+            Console.Beep(400, 200);
         }
     }
 
@@ -150,51 +281,57 @@ class Program
         SNAKE_BODY.Add(new Point(x, y));
     }
 
-    private static Direction UpdateDirection(ConsoleKeyInfo newKeyInfo)
+    private static Direction UpdateDirection(ConsoleKeyInfo oldKeyInfo, ConsoleKeyInfo newKeyInfo)
     {
         Direction direction = Direction.RIGHT;
 
         switch(newKeyInfo.Key)
         {
             case ConsoleKey.W:
-                direction = Direction.UP;
+                if (oldKeyInfo.Key != ConsoleKey.S)
+                    direction = Direction.UP;
             break;
             case ConsoleKey.A:
-                direction = Direction.LEFT;
+                if (oldKeyInfo.Key != ConsoleKey.D)
+                    direction = Direction.LEFT;
             break;
             case ConsoleKey.S:
-                direction = Direction.DOWN;
+                if (oldKeyInfo.Key != ConsoleKey.W)
+                    direction = Direction.DOWN;
             break;
             case ConsoleKey.D:
-                direction = Direction.RIGHT;
+                if (oldKeyInfo.Key != ConsoleKey.A)
+                    direction = Direction.RIGHT;
             break;
         }
 
         return direction;
     }
 
-    private static void UpdatePosition(Direction direction)
+    private static Point UpdatePosition(Direction direction)
     {
         switch(direction)
         {
             case Direction.UP:
-                if(SNAKE_HEAD.Y > 0)
+                //if(SNAKE_HEAD.Y > 0)
                     SNAKE_HEAD.Y--;
             break;
             case Direction.RIGHT:
-                if(SNAKE_HEAD.X < (GAME_RESOLUTION - 1))
+                //if(SNAKE_HEAD.X < (GAME_RESOLUTION - 1))
                     SNAKE_HEAD.X++;
             break;
             case Direction.DOWN:
-                if(SNAKE_HEAD.Y < (GAME_RESOLUTION - 1))
+                //if(SNAKE_HEAD.Y < (GAME_RESOLUTION - 1))
                     SNAKE_HEAD.Y++;
             break;
             case Direction.LEFT:
-                if(SNAKE_HEAD.X > 0)
+                //if(SNAKE_HEAD.X > 0)
                     SNAKE_HEAD.X--;
             break;
         }
         UpdateBody();
+
+        return new Point(SNAKE_HEAD.X, SNAKE_HEAD.Y);
     }
 
     private static void UpdateBody()
@@ -205,6 +342,26 @@ class Program
         }
 
         SNAKE_BODY[0] = new Point(SNAKE_HEAD.X, SNAKE_HEAD.Y);
+    }
+
+    static void PlayStartSound()
+    {
+        Console.Beep(1000, 100); // Nota aguda
+        Console.Beep(1200, 100); // Nota mais aguda
+        Console.Beep(1400, 150); // Nota final
+        Console.Beep(1000, 100); // Nota aguda
+        Console.Beep(1200, 100); // Nota mais aguda
+        Console.Beep(1400, 150); // Nota final
+    }
+
+    static void PlayEndSound()
+    {
+        Console.Beep(800, 150); // Nota média
+        Console.Beep(600, 150); // Nota grave
+        Console.Beep(400, 200); // Nota mais grave
+        Console.Beep(800, 150); // Nota média
+        Console.Beep(600, 150); // Nota grave
+        Console.Beep(400, 200); // Nota mais grave
     }
 }
 
@@ -227,6 +384,7 @@ struct Point
 {
     public int X;
     public int Y;
+    public bool INITIALIZED => X + Y > 0 ? true : false;
 
     public Point(int x, int y)
     {
